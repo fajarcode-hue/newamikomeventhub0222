@@ -19,14 +19,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->name('login.post');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::resource('events', EventController::class);
-    Route::resource('categories', CategoryController::class);
-    Route::resource('partners', PartnerController::class);
+   
 
     // Mengamankan Route Administrasi di balik tembok (Middleware)
     Route::middleware(['auth', 'admin'])->group(function () {
-    //Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    //Route::get('transactions', [TransactionController::class, 'index'])->name('transactions.index');
+     Route::resource('events', EventController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('partners', PartnerController::class);
     
     
     });
