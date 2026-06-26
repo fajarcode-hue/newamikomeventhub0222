@@ -14,6 +14,11 @@ Route::post('/checkout/{event}', [\App\Http\Controllers\CheckoutController::clas
 // TAMBAHKAN BARIS INI UNTUK DETAIL EVENT PUBLIK
 Route::get('/events/{event}', [\App\Http\Controllers\Admin\EventController::class, 'show'])->name('events.show');
 
+// Rute untuk menampilkan halaman pembayaran popup
+Route::get('/checkout/payment/{transaction}', [\App\Http\Controllers\CheckoutController::class, 'payment'])->name('checkout.payment');
+// Rute untuk menerima laporan pembayaran dari Midtrans
+Route::post('/midtrans/callback', [\App\Http\Controllers\CheckoutController::class, 'callback'])->name('midtrans.callback');
+
 // Ini route detail yang diakses publik/user biasa
 
 Route::get('/login', function () {
