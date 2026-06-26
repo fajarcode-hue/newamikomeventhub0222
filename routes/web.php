@@ -8,6 +8,13 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/checkout/{event}', [\App\Http\Controllers\CheckoutController::class, 'create'])->name('checkout.create');
+Route::post('/checkout/{event}', [\App\Http\Controllers\CheckoutController::class, 'store'])->name('checkout.store');
+
+// TAMBAHKAN BARIS INI UNTUK DETAIL EVENT PUBLIK
+Route::get('/events/{event}', [\App\Http\Controllers\Admin\EventController::class, 'show'])->name('events.show');
+
+// Ini route detail yang diakses publik/user biasa
 
 Route::get('/login', function () {
     return redirect()->route('admin.login');
@@ -19,17 +26,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->name('login.post');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-   
-
     // Mengamankan Route Administrasi di balik tembok (Middleware)
     Route::middleware(['auth', 'admin'])->group(function () {
      Route::resource('events', EventController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('partners', PartnerController::class);
-    
-    
+    Route::get('transactions', [\App\Http\Controllers\Admin\TransactionController::class, 'index'])->name('transactions.index');
+
     });
 });
+
+
+
 
 
 

@@ -81,7 +81,7 @@
                                 @endif
                             </span>
                             {{-- Arahkan ke rute detail event jika sudah siap nanti --}}
-                            <a href="#" class="px-5 py-2 bg-indigo-50 text-indigo-600 rounded-xl font-bold hover:bg-indigo-600 hover:text-white transition">
+                            <a href="{{ route('events.show', $event->id) }}" class="px-5 py-2 bg-indigo-50 text-indigo-600 rounded-xl font-bold hover:bg-indigo-600 hover:text-white transition">
                                 Lihat Detail
                             </a>
                         </div>
