@@ -11,43 +11,31 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/checkout/{event}', [\App\Http\Controllers\CheckoutController::class, 'create'])->name('checkout.create');
 Route::post('/checkout/{event}', [\App\Http\Controllers\CheckoutController::class, 'store'])->name('checkout.store');
 
-// TAMBAHKAN BARIS INI UNTUK DETAIL EVENT PUBLIK
 Route::get('/events/{event}', [\App\Http\Controllers\Admin\EventController::class, 'show'])->name('events.show');
 
-// Rute untuk menampilkan halaman pembayaran popup
 Route::get('/checkout/payment/{transaction}', [\App\Http\Controllers\CheckoutController::class, 'payment'])->name('checkout.payment');
-// Rute untuk menerima laporan pembayaran dari Midtrans
 Route::post('/midtrans/callback', [\App\Http\Controllers\CheckoutController::class, 'callback'])->name('midtrans.callback');
 
-// Ini route detail yang diakses publik/user biasa
+// Rute Cek Tiket Publik (tanpa login)
+Route::get('/tickets', [\App\Http\Controllers\TicketController::class, 'lookup'])->name('tickets.lookup');
+Route::post('/tickets/search', [\App\Http\Controllers\TicketController::class, 'search'])->name('tickets.search');
+Route::get('/tickets/{transaction}', [\App\Http\Controllers\TicketController::class, 'show'])->name('tickets.show');
 
 Route::get('/login', function () {
     return redirect()->route('admin.login');
 })->name('login');
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    // Rute Login bebas akses
     Route::get('login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('login', [AuthController::class, 'login'])->name('login.post');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Mengamankan Route Administrasi di balik tembok (Middleware)
     Route::middleware(['auth', 'admin'])->group(function () {
-     Route::resource('events', EventController::class);
-    Route::resource('categories', CategoryController::class);
-    Route::resource('partners', PartnerController::class);
-    Route::get('transactions', [\App\Http\Controllers\Admin\TransactionController::class, 'index'])->name('transactions.index');
-
+        Route::resource('events', EventController::class);
+        Route::resource('categories', CategoryController::class);
+        Route::resource('partners', PartnerController::class);
+        Route::get('transactions', [\App\Http\Controllers\Admin\TransactionController::class, 'index'])->name('transactions.index');
+        Route::get('checkin', [\App\Http\Controllers\Admin\CheckinController::class, 'index'])->name('checkin.index');
+        Route::post('checkin/verify', [\App\Http\Controllers\Admin\CheckinController::class, 'verify'])->name('checkin.verify');
     });
 });
-
-
-
-
-
-
-// Route::prefix('admin')->name('admin.')->group(function () {
-//     Route::resource('events', EventController::class);
-//     Route::resource('categories', CategoryController::class);
-//     Route::resource('partners', PartnerController::class);
-// });
